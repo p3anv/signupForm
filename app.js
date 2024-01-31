@@ -82,6 +82,11 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
+app.get("/signup", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "signup.html"));
+});
+
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -112,10 +117,17 @@ app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 
+// Existing login route
+app.post("/login", passport.authenticate('local', {
+  successRedirect: '/dashboard',
+  failureRedirect: '/login',
+  failureFlash: true // Enable if using flash messages for failure
+}));
 
-app.post("/login", passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }));
+// app.post("/login", passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }));
 
 function isAuthenticated(req, res, next) {
+  console.log("isAuthenticated middleware called")
   if (req.isAuthenticated()) {
     return next();
   }
