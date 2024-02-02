@@ -4,33 +4,26 @@ const app = express();
 const ejs = require("ejs");
 const path = require('path');
 const bodyParser = require("body-parser");
-app.use(express.json());
-const User = require("./models/user");
+const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const session = require('express-session');
-
-const router = express.Router();
-const port = 4000;
+const User = require("./models/user");
+const route = require('./route'); // Import the route module
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
 var uri = "mongodb://127.0.0.1:27017/myDatabase";
-
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
-
 const connection = mongoose.connection;
 
-connection.once("open", function() {
+connection.once("open", function () {
   console.log("MongoDB database connection established successfully");
 });
-
-
 
 // Passport Configuration
 passport.use(new LocalStrategy(
@@ -47,6 +40,7 @@ passport.use(new LocalStrategy(
       });
   }
 ));
+
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
@@ -70,75 +64,17 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
-
-
-// Assuming you have a login.html file in your views folder
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
-});
-
-app.get("/signup", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "signup.html"));
-});
-
-
-
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use("/", router);
-
-// SIGNUP
-app.post("/signup", (req, res) => {
-  const newUser = new User({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  });
-
-  newUser
-    .save()
-    .then(() => {
-      console.log(req.body);
-      res.send("User signed up successfully!");
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error saving user to database");
-    });
-});
-
-// LOGIN 
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
-});
-
-// Existing login route
+app.use("/", route); // Use the router from route.js
 app.post("/login", passport.authenticate('local', {
   successRedirect: '/dashboard',
   failureRedirect: '/login',
   failureFlash: true // Enable if using flash messages for failure
 }));
 
-// app.post("/login", passport.authenticate('local', { successRedirect: '/dashboard', failureRedirect: '/login' }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-function isAuthenticated(req, res, next) {
-  console.log("isAuthenticated middleware called")
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
+const port = 4000;
 
-
-app.listen(port, function() {
+app.listen(port, function () {
   console.log("Server is running on Port: " + port);
-});
-
-app.get("/dashboard", isAuthenticated, (req, res) => {
-  res.render("dashboard", { user: req.user });
 });
