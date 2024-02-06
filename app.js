@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const flash = require('express-flash');
+const session = require('express-session');
 const app = express();
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
@@ -8,7 +10,6 @@ const isAuthenticated = require('./middleware/isAuthenticated');
 const ejs = require("ejs");
 const path = require('path');
 const bodyParser = require("body-parser");
-const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require("./models/user");
@@ -67,20 +68,32 @@ passport.deserializeUser(function (id, done) {
 
 app.use(session({
   secret: 'a5b2f7049e55cfe6bf7b6e46b49d94d67de9e65b7ee46fc1900e9bf9ea75c0a3',
-  resave: false,
-  saveUninitialized: false
+  resave: true,
+  saveUninitialized: true
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
+
+
 app.use('/', route); // Use the router from route.js
+
+app.get('/login', (req, res) => {
+  res.render('login', { message: req.flash('error')[0] }); // Ensure the correct flash message is passed
+});
 
 app.post("/login", passport.authenticate('local', {
   successRedirect: '/dashboard',
-  failureRedirect: '/error.html',
+  failureRedirect: '/error',
   failureFlash: true // Enable if using flash messages for failure
 }));
+
 
 app.get('/logout', (req, res) => {
   req.logout();

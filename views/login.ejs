@@ -63,6 +63,9 @@
   </style>
 </head>
 <body>
+  <% if (messages.error && messages.error.length > 0) { %>
+    <div style="color: red;"><%= messages.error[0] %></div>
+  <% } %>
   <button id="loginButton">Login</button>
   <!-- <button id="signupButton">Signup</button> -->
 
@@ -97,7 +100,6 @@
         .then(data => {
           console.log(data);
           if (data.success) {
-            //alert('Login successful! Redirecting to dashboard...'); 
             window.location.href = '/dashboard';
           } else {
             alert('Login failed. ' + data.message);
@@ -105,7 +107,6 @@
         })
         .catch(error => {
           console.error('Error:', error);
-          //alert('An error occurred. Please try again.');
         });
       });
     });

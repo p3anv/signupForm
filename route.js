@@ -18,6 +18,9 @@ router.get('/login', (req, res) => {
 router.get('/signup', (req, res) => {
   res.render('signup');
 });
+router.get('/error', (req, res) => {
+  res.render('error');
+});
 
 router.post('/signup', (req, res) => {
   const newUser = new User({
