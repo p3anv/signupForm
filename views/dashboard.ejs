@@ -63,10 +63,11 @@
     <div id="main-content">
         <h1>Welcome to the Dashboard</h1>
         <div id="userInfo">
-            <p><strong>Username:</strong> <span id="username"><%= user.username %></span></p>
-            <p><strong>Email:</strong> <span id="email"><%= user.email %></span></p>
-            <!-- Note: It's not recommended to display the password on the dashboard; this is just an example -->
-            <p><strong>Password:</strong> <span id="password"><%= user.password %></span></p>
+            <p><strong>Username:</strong> <%= user.username %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Full Name:</strong> <%= user.fullName %></p>
+            <p><strong>Date of Birth:</strong> <%= user.dob.toLocaleDateString('en-GB') %></p>
+            <p><strong>Gender:</strong> <%= user.gender %></p>
         </div>
         <a href="/logout">Logout</a>
     </div>

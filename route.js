@@ -20,6 +20,9 @@ router.post('/signup', (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
+    fullName: req.body.fullName,
+    dob: req.body.dob,
+    gender: req.body.gender,
   });
 
   newUser.save()
@@ -32,6 +35,7 @@ router.post('/signup', (req, res) => {
       res.status(500).send("Error saving user to the database");
     });
 });
+
 
 function isAuthenticated(req, res, next) {
   console.log("isAuthenticated middleware called")
