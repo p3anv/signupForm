@@ -24,6 +24,7 @@ router.post('/signup', (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: req.body.password,
+    phone:req.body.phone,
     fullName: req.body.fullName,
     dob: req.body.dob,
     gender: req.body.gender,

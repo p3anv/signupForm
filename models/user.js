@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   fullName: String,
   dob: Date,
   gender: String,
+  phone:String
 });
 
 const User = mongoose.model("User", userSchema);
