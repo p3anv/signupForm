@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const path = require('path');
 const User = require('./models/user');
+const verifyToken = require('./verifyToken');
+
+// console.log(require('fs').readdirSync(path.join(__dirname, '../middleware')));
+const isAuthenticated = require('./middleware/isAuthenticated'); // Adjust the path accordingly
 
 router.get('/', (req, res) => {
   res.render('index');
@@ -37,16 +41,31 @@ router.post('/signup', (req, res) => {
 });
 
 
-function isAuthenticated(req, res, next) {
-  console.log("isAuthenticated middleware called")
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
 
-router.get('/dashboard', isAuthenticated, (req, res) => {
+
+
+// function isAuthenticated(req, res, next) {
+//   console.log("isAuthenticated middleware called");
+//   if (req.isAuthenticated()) {
+//     return next();
+//   }
+//   res.redirect('/login');
+// }
+
+router.get('/dashboard', isAuthenticated,(req, res) => {
   res.render('dashboard', { user: req.user });
 });
 
+router.get('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      console.error('Error during logout:', err);
+      return res.redirect('/');
+    }
+    res.clearCookie('token');
+    res.redirect('/');
+  });
+});
+
 module.exports = router;
+// module.exports.isAuthenticated = isAuthenticated;
