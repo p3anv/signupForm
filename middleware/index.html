@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            position: fixed;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        #sidebar a {
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const profileLink = document.querySelector('[href="#profile"]');
+            const bookAppointmentLink = document.querySelector('[href="#book-appointment"]');
+            const historyLink = document.querySelector('[href="#history"]');
+
+            const profileContent = document.getElementById("profile");
+            const bookAppointmentContent = document.getElementById("book-appointment");
+            const historyContent = document.getElementById("history");
+
+            profileLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                hideAllContent();
+                profileContent.style.display = "block";
+            });
+
+            bookAppointmentLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                hideAllContent();
+                bookAppointmentContent.style.display = "block";
+            });
+
+            historyLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                hideAllContent();
+                historyContent.style.display = "block";
+            });
+
+            function hideAllContent() {
+                profileContent.style.display = "none";
+                bookAppointmentContent.style.display = "none";
+                historyContent.style.display = "none";
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <div id="sidebar">
+        <a href="#profile">Profile</a>
+        <a href="#book-appointment">Book an Appointment</a>
+        <a href="#history">History of Appointments</a>
+    </div>
+
+    <div id="content">
+        <div id="profile" style="display:none;">
+            <h2>Your Profile</h2>
+            <p>Name: John Doe</p>
+            <p>Email: john.doe@example.com</p>
+            <!-- Add more profile information as needed -->
+        </div>
+
+        <div id="book-appointment" style="display:none;">
+            <h2>Book an Appointment</h2>
+            <!-- Add form or content for booking appointment -->
+        </div>
+
+        <div id="history" style="display:none;">
+            <h2>Appointment History</h2>
+            <!-- Add a list or table to display appointment history -->
+        </div>
+    </div>
+
+</body>
+
+</html>

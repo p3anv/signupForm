@@ -107,6 +107,7 @@ app.use('/dashboard', (req, res, next) => {
 
   if (!token) {
     return res.redirect('/login');
+    
   }
 
   jwt.verify(token, jwtSecretKey, (err, decoded) => {
@@ -119,6 +120,7 @@ app.use('/dashboard', (req, res, next) => {
 }, isAuthenticated);
 
 app.get('/dashboard', (req, res) => {
+  console.log("Redirecting to Dashboard")
   res.render('dashboard', { user: req.user });
 });
 

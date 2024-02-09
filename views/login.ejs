@@ -1,115 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form</title>
+  <title>Login Page</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #d3eaf2;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4f4f4;
+      margin: 0;
     }
 
-    button {
-      background-color: #3498db;
-      color: #fff;
-      padding: 15px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-
-    button:hover {
-      background-color: #217dbb;
-    }
-
-    #loginButton {
-      background-color: #2ecc71;
-    }
-
-    #signupButton {
-      background-color: #27ae60;
-    }
-
-    form {
-      display: none;
-      width: 300px;
+    #loginContainer {
       background-color: #fff;
+      padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-      margin-top: 20px;
     }
 
     label {
-      margin-top: 10px;
-      color: #555;
+      display: block;
+      margin-bottom: 8px;
     }
 
     input {
+      width: 100%;
       padding: 8px;
-      margin: 5px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border-radius: 10px;
     }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .signup-link{
+      text-align: center;
+      margin: 20px;
+    }
+
+    .signup-link a {
+      color: #0040ef;
+      text-decoration: none;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+    
   </style>
 </head>
+
 <body>
-  <% if (messages.error && messages.error.length > 0) { %>
-    <div style="color: red;"><%= messages.error[0] %></div>
-  <% } %>
-  <button id="loginButton">Login</button>
-  <!-- <button id="signupButton">Signup</button> -->
+  <div id="loginContainer">
+    <h2>Login Here</h2>
+    <form id="loginForm" action="/login" method="POST">
+      <% if (messages.error && messages.error.length > 0) { %>
+      <div style="color: red;"><%= messages.error[0] %></div>
+      <% } %>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
 
-  <form id="loginForm" action="/login" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br><br>
-    <button id="submitForm" type="submit">Login</button>
-  </form>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const loginForm = document.getElementById('loginForm');
+      <div class="signup-link">
+        Don't have an account? <a href="/signup">SignIn Here</a>
+      </div>
 
-      document.getElementById('loginButton').addEventListener('click', function () {
-        loginForm.style.display = 'block';
-      });
+      <button id="submitForm" type="submit">Login</button>
+    </form>
 
-      document.getElementById('submitForm').addEventListener('click', function () {
-        var username = document.getElementById('username').value;
-        var password = document.getElementById('password').value;
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const loginForm = document.getElementById('loginForm');
 
-        fetch('/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ username: username, password: password })
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          if (data.success) {
-            window.location.href = '/dashboard';
-          } else {
-            alert('Login failed. ' + data.message);
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
+        document.getElementById('submitForm').addEventListener('click', function () {
+          var username = document.getElementById('username').value;
+          var password = document.getElementById('password').value;
+
+          fetch('/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: username, password: password })
+          })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              if (data.success) {
+                window.location.href = '/dashboard';
+              } else {
+                alert('Login failed. ' + data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
         });
       });
-    });
-  </script>
+    </script>
+  </div>
 </body>
+
 </html>
